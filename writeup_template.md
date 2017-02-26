@@ -18,13 +18,13 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: ./test_images/undistort_output.png "Undistorted"
-[image2]: ./test_images/test1.png "Road Transformed"
-[image3]: ./test_images/binary_combo_example.png "Binary Example"
-[image4]: ./test_images/warped_straight_lines.jpg "Warp Example"
-[image4_1]: ./test_images/warped_straight_lines_1.jpg "Warp Example"
-[image5]: ./test_images/color_fit_lines.jpg "Fit Visual"
-[image6]: ./test_images/example_output.jpg "Output"
+[image1]: ./output_images/undistort_output.png "Undistorted"
+[image2]: ./output_images/test1.png "Road Transformed"
+[image3]: ./output_images/binary_combo_example.png "Binary Example"
+[image4]: ./output_images/warped_straight_lines.jpg "Warp Example"
+[image4_1]: ./output_images/warped_straight_lines_1.jpg "Warp Example"
+[image5]: ./output_images/color_fit_lines.jpg "Fit Visual"
+[image6]: ./output_images/example_output.jpg "Output"
 [video1]: ./white2.mp4 "Video"
 
 
