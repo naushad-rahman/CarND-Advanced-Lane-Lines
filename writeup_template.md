@@ -18,28 +18,21 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: ./examples/undistort_output.png "Undistorted"
-[image2]: ./test_images/test1.jpg "Road Transformed"
-[image3]: ./examples/binary_combo_example.jpg "Binary Example"
-[image4]: ./examples/warped_straight_lines.jpg "Warp Example"
-[image5]: ./examples/color_fit_lines.jpg "Fit Visual"
-[image6]: ./examples/example_output.jpg "Output"
-[video1]: ./project_video.mp4 "Video"
+[image1]: ./test_images/undistort_output.png "Undistorted"
+[image2]: ./test_images/test1.png "Road Transformed"
+[image3]: ./test_images/binary_combo_example.png "Binary Example"
+[image4]: ./test_images/warped_straight_lines.jpg "Warp Example"
+[image4_1]: ./test_images/warped_straight_lines_1.jpg "Warp Example"
+[image5]: ./test_images/color_fit_lines.jpg "Fit Visual"
+[image6]: ./test_images/example_output.jpg "Output"
+[video1]: ./white2.mp4 "Video"
 
-## [Rubric](https://review.udacity.com/#!/rubrics/571/view) Points
-###Here I will consider the rubric points individually and describe how I addressed each point in my implementation.  
 
----
-###Writeup / README
-
-####1. Provide a Writeup / README that includes all the rubric points and how you addressed each one.  You can submit your writeup as markdown or pdf.  [Here](https://github.com/udacity/CarND-Advanced-Lane-Lines/blob/master/writeup_template.md) is a template writeup for this project you can use as a guide and a starting point.  
-
-You're reading it!
 ###Camera Calibration
 
 ####1. Briefly state how you computed the camera matrix and distortion coefficients. Provide an example of a distortion corrected calibration image.
 
-The code for this step is contained in the first code cell of the IPython notebook located in "./examples/example.ipynb" (or in lines # through # of the file called `some_file.py`).  
+The code for this step ,as done in function name "calibrate_camera()", Which is coded in the 2nd cell of the file "Project 4.ipynb". 
 
 I start by preparing "object points", which will be the (x, y, z) coordinates of the chessboard corners in the world. Here I am assuming the chessboard is fixed on the (x, y) plane at z=0, such that the object points are the same for each calibration image.  Thus, `objp` is just a replicated array of coordinates, and `objpoints` will be appended with a copy of it every time I successfully detect all chessboard corners in a test image.  `imgpoints` will be appended with the (x, y) pixel position of each of the corners in the image plane with each successful chessboard detection.  
 
@@ -76,26 +69,56 @@ dst = np.float32(
 ```
 This resulted in the following source and destination points:
 
-| Source        | Destination   | 
-|:-------------:|:-------------:| 
-| 585, 460      | 320, 0        | 
-| 203, 720      | 320, 720      |
-| 1127, 720     | 960, 720      |
-| 695, 460      | 960, 0        |
+	 y_limit = image.shape[0] * 0.4
+    
+	original_img_pts = [[line1[0], line1[1]], [line1[2], line1[3]], [line2[0], line2[1]], [line2[2], line2[3]]]
+    
+    destination_pts = [[line1[2], y_limit], [line1[2], line1[3]], [line2[2], y_limit], [line2[2], line2[3]]]
+    
 
 I verified that my perspective transform was working as expected by drawing the `src` and `dst` points onto a test image and its warped counterpart to verify that the lines appear parallel in the warped image.
 
 ![alt text][image4]
+![alt text][image4_1]
 
 ####4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
-Then I did some other stuff and fit my lane lines with a 2nd order polynomial kinda like this:
+To find the lane , I have used histggram method , Code is done in cell 93 
+code is 
+   """
+    histogram = np.sum(image[image.shape[0]/2:,:], axis=0)
+    
+    indexes = find_peaks_cwt(histogram, np.arange(1, 550))
+
+    
+    return [(indexes[0], image.shape[0]), (indexes[-1], image.shape[0])]
 
 ![alt text][image5]
 
 ####5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
-I did this in lines # through # in my code in `my_other_file.py`
+To find the center of the image I used given below code 
+window_size = 200 * 2
+    
+    x_base = lane_base[0]
+    
+    if(x_base > 200):
+        window_low = x_base - window_size/2
+    else:
+        window_low = 0
+        
+    window_high = x_base + window_size/2
+    
+    # Define a region
+    window = image[:, window_low:window_high]
+
+    # Find the coordinates of the white pixels in this region
+    x, y = np.where(window == 1)
+    
+    # Add window low as an offset
+    y += np.uint64(window_low)
+    
+
 
 ####6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
